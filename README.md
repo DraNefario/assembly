@@ -58,5 +58,5 @@ O projeto inclui a implementação das seguintes funções:
 
 ## Autor
 
-Thomas Manussadjian Steinhausser
+Thomas Manussadjian Steinhausser e Brenda Gabrielli Barbosa
 
