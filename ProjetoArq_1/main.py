@@ -12,10 +12,10 @@ registrador_dx = 0x00
 flag_zero = False
 
 #memoria = MemoriaCache('ProjetoArq_1/arquivos_memoria/mov_mov_add.bin')
-memoria = MemoriaCache('ProjetoArq_1/arquivos_memoria/inc_dec.bin')
+#memoria = MemoriaCache('ProjetoArq_1/arquivos_memoria/inc_dec.bin')
 #memoria = MemoriaCache('ProjetoArq_1/arquivos_memoria/todas_instrucoes.bin')
 #memoria = MemoriaCache('ProjetoArq_1/arquivos_memoria/programa_simples.bin')
-#memoria = MemoriaCache('ProjetoArq_1/arquivos_memoria/fibonacci_10.bin')
+memoria = MemoriaCache('ProjetoArq_1/arquivos_memoria/fibonacci_10.bin')
 
 def buscarEDecodificarInstrucao():
     global registrador_ax
@@ -32,15 +32,42 @@ def buscarEDecodificarInstrucao():
     if instrucao == 0x40:
         print('MOV Reg, Byte')
         return 0x40
-    elif instrucao == 0x01:
+    if instrucao == 0x01:
         print('ADD Reg, Reg ')
         return 0x01
-    elif instrucao == 0x10:
+    if instrucao == 0x10:
         print('INC Reg')
         return 0x10
-    elif instrucao == 0x20:
+    if instrucao == 0x20:
         print('DEC Reg')
         return 0x20
+    if instrucao == 0x00:
+        print('ADD Reg, Byte')
+        return 0x00
+    if instrucao == 0x30:
+        print('SUB Reg, Byte')
+        return 0x30
+    if instrucao == 0x31:
+        print('SUB Reg, Reg')
+        return 0x31
+    if instrucao == 0x41:
+        print('MOV Reg, Reg')
+        return 0x41
+    if instrucao == 0x50:
+        print('JMP Byte')
+        return 0x50
+    if instrucao == 0x60:
+        print('CMP Reg, Byte')
+        return 0x60
+    if instrucao == 0x61:
+        print('CMP Reg, Reg')
+        return 0x61
+    if instrucao == 0x79:
+        print('JZ Byte')
+        return 0x79
+    if instrucao == 0x70:
+        print('JZ Byte')
+        return 0x70
 
     return -1
 
@@ -61,6 +88,11 @@ def lerOperadoresExecutarInstrucao(idInstrucao):
             registrador_ax = operador2
         elif operador1 == 0x03:
             registrador_bx = operador2
+        elif operador1 == 0x04:
+            registrador_cx = operador2
+        elif operador1 == 0x05:
+            registrador_dx = operador2
+
     
     if idInstrucao == 0x01:
         operador1 = memoria.getValorMemoria(registrador_cp +1)
@@ -108,12 +140,163 @@ def lerOperadoresExecutarInstrucao(idInstrucao):
             registrador_cx -= 1
         elif operador1 == 0x05:
             registrador_dx -= 1
+    
 
+    if idInstrucao == 0x00:
+        operador1 = memoria.getValorMemoria(registrador_cp +1)
+        operador2 = memoria.getValorMemoria(registrador_cp + 2)
+
+        if operador1 == 0x02:
+            registrador_ax = registrador_ax + operador2
+        elif operador1 == 0x03:
+            registrador_bx = registrador_bx + operador2
+        elif operador1 == 0x04:
+            registrador_cx = registrador_cx + operador2
+        elif operador1 == 0x05:
+            registrador_dx = registrador_dx + operador2
+    
+    if idInstrucao == 0x30:
+        operador1 = memoria.getValorMemoria(registrador_cp +1)
+        operador2 = memoria.getValorMemoria(registrador_cp +2)
+
+        if operador1 == 0x02:
+            registrador_ax = registrador_ax - operador2
+        elif operador1 == 0x03:
+            registrador_bx = registrador_bx - operador2
+        elif operador1 == 0x04:
+            registrador_cx = registrador_cx - operador2
+        elif operador1 == 0x05:
+            registrador_dx = registrador_dx - operador2
+
+    
+    if idInstrucao == 0x31:
+        operador1 = memoria.getValorMemoria(registrador_cp +1)
+        operador2 = memoria.getValorMemoria(registrador_cp +2)
+
+        if operador1 == 0x02:
+            if operador2 == 0x02:
+                registrador_ax -= registrador_ax
+            if operador2 == 0x03:
+                registrador_ax -= registrador_bx
+            if operador2 == 0x04:
+                registrador_ax -= registrador_cx
+            if operador2 == 0x05:
+                registrador_ax -= registrador_dx
+        elif operador1 == 0x03:
+            if operador2 == 0x02:
+                registrador_ax -= registrador_ax
+            if operador2 == 0x03:
+                registrador_ax -= registrador_bx
+            if operador2 == 0x04:
+                registrador_ax -= registrador_cx
+            if operador2 == 0x05:
+                registrador_ax -= registrador_dx
+
+    
+    if idInstrucao == 0x41:
+        operador1 = memoria.getValorMemoria(registrador_cp +1)
+        operador2 = memoria.getValorMemoria(registrador_cp +2)
+
+        if operador1 == 0x02:
+            if operador2 == 0x02:
+                registrador_ax = registrador_ax
+            if operador2 == 0x03:
+                registrador_ax = registrador_bx
+            if operador2 == 0x04:
+                registrador_ax = registrador_cx
+            if operador2 == 0x05:
+                registrador_ax = registrador_dx
+        elif operador1 == 0x03:
+            if operador2 == 0x02:
+                registrador_ax = registrador_ax
+            if operador2 == 0x03:
+                registrador_ax = registrador_bx
+            if operador2 == 0x04:
+                registrador_ax = registrador_cx
+            if operador2 == 0x05:
+                registrador_ax = registrador_dx
+
+    
+    if idInstrucao == 0x79:
+        operador1= memoria.getValorMemoria(registrador_cp + 1)
+    
         
+        if flag_zero:
+            registrador_cp = operador1
+    
+
+    if idInstrucao == 0x60:
+        operador1 = memoria.getValorMemoria(registrador_cp +1)
+        operador2 = memoria.getValorMemoria(registrador_cp +2)
+
+        if operador1 == 0x02:
+            if registrador_ax == operador2:
+                flag_zero = True
+            else:
+                flag_zero = False
+        
+        if operador1 == 0x03:
+            if registrador_bx == operador2:
+                flag_zero = True
+            else:
+                flag_zero = False
+
+        if operador1 == 0x04:
+            if registrador_cx == operador2:
+                flag_zero = True
+            else:
+                flag_zero = False
+
+        if operador1 == 0x05:
+            if registrador_dx == operador2:
+                flag_zero = True
+            else:
+                flag_zero = False
+        
+    
+    if idInstrucao == 0x61:
+        operador1 = memoria.getValorMemoria(registrador_cp +1)
+        operador2 = memoria.getValorMemoria(registrador_cp +2)
+
+        if operador1 == 0x02:
+            if registrador_ax == operador2:
+                flag_zero = True
+            else:
+                flag_zero = False
+        
+        if operador1 == 0x03:
+            if registrador_bx == operador2:
+                flag_zero = True
+            else:
+                flag_zero = False
+
+        if operador1 == 0x04:
+            if registrador_cx == operador2:
+                flag_zero = True
+            else:
+                flag_zero = False
+
+        if operador1 == 0x05:
+            if registrador_dx == operador2:
+                flag_zero = True
+            else:
+                flag_zero = False
+            
+    
+    if idInstrucao == 0x50:
+        operador1= memoria.getValorMemoria(registrador_cp + 1)
+    
+        registrador_cp = operador1
+    
+    if idInstrucao == 0x70:
+        operador1= memoria.getValorMemoria(registrador_cp + 1)
+    
+        
+        if flag_zero:
+            registrador_cp = operador1
 
 
-
-
+ 
 
 
 
@@ -134,7 +317,22 @@ def calcularProximaInstrucao(idInstrucao):
         registrador_cp = registrador_cp + 2
     if idInstrucao == 0x20:
         registrador_cp = registrador_cp + 2
-    
+    if idInstrucao == 0x00:
+        registrador_cp = registrador_cp + 3
+    if idInstrucao == 0x30:
+        registrador_cp = registrador_cp + 3
+    if idInstrucao == 0x31:
+        registrador_cp = registrador_cp + 3
+    if idInstrucao == 0x41:
+        registrador_cp = registrador_cp + 3
+    if idInstrucao == 0x79:
+        registrador_cp = registrador_cp + 2
+    if idInstrucao == 0x50:
+        registrador_cp = registrador_cp + 2
+    if idInstrucao == 0x70:
+        registrador_cp = registrador_cp + 2
+
+
 
 def dumpRegistradores():
     if CPU_DEBUG:
