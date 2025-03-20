@@ -67,7 +67,7 @@ def buscarEDecodificarInstrucao():
         return 0x79
     if instrucao == 0x70:
         print('JZ Byte')
-        return 0x70
+        return 0x79
 
     return -1
 
@@ -109,13 +109,31 @@ def lerOperadoresExecutarInstrucao(idInstrucao):
                 registrador_ax += registrador_dx
         elif operador1 == 0x03:
             if operador2 == 0x02:
-                registrador_ax += registrador_ax
+                registrador_bx += registrador_ax
             if operador2 == 0x03:
-                registrador_ax += registrador_bx
+                registrador_bx += registrador_bx
             if operador2 == 0x04:
-                registrador_ax += registrador_cx
+                registrador_bx += registrador_cx
             if operador2 == 0x05:
-                registrador_ax += registrador_dx
+                registrador_bx += registrador_dx
+        elif operador1 == 0x04:
+            if operador2 == 0x02:
+                registrador_cx += registrador_ax
+            if operador2 == 0x03:
+                registrador_cx += registrador_bx
+            if operador2 == 0x04:
+                registrador_cx += registrador_cx
+            if operador2 == 0x05:
+                registrador_cx += registrador_dx
+        elif operador1 == 0x05:
+            if operador2 == 0x02:
+                registrador_dx += registrador_ax
+            if operador2 == 0x03:
+                registrador_dx += registrador_bx
+            if operador2 == 0x04:
+                registrador_dx += registrador_cx
+            if operador2 == 0x05:
+                registrador_dx += registrador_dx
     
     if idInstrucao == 0x10:
         operador1 = memoria.getValorMemoria(registrador_cp + 1)
@@ -184,13 +202,31 @@ def lerOperadoresExecutarInstrucao(idInstrucao):
                 registrador_ax -= registrador_dx
         elif operador1 == 0x03:
             if operador2 == 0x02:
-                registrador_ax -= registrador_ax
+                registrador_bx -= registrador_ax
             if operador2 == 0x03:
-                registrador_ax -= registrador_bx
+                registrador_bx -= registrador_bx
             if operador2 == 0x04:
-                registrador_ax -= registrador_cx
+                registrador_bx -= registrador_cx
             if operador2 == 0x05:
-                registrador_ax -= registrador_dx
+                registrador_bx -= registrador_dx
+        elif operador1 == 0x04:
+            if operador2 == 0x02:
+                registrador_cx -= registrador_ax
+            if operador2 == 0x03:
+                registrador_cx -= registrador_bx
+            if operador2 == 0x04:
+                registrador_cx -= registrador_cx
+            if operador2 == 0x05:
+                registrador_cx -= registrador_dx
+        elif operador1 == 0x05:
+            if operador2 == 0x02:
+                registrador_dx -= registrador_ax
+            if operador2 == 0x03:
+                registrador_dx -= registrador_bx
+            if operador2 == 0x04:
+                registrador_dx -= registrador_cx
+            if operador2 == 0x05:
+                registrador_dx -= registrador_dx
 
     
     if idInstrucao == 0x41:
@@ -208,13 +244,31 @@ def lerOperadoresExecutarInstrucao(idInstrucao):
                 registrador_ax = registrador_dx
         elif operador1 == 0x03:
             if operador2 == 0x02:
-                registrador_ax = registrador_ax
+                registrador_bx = registrador_ax
             if operador2 == 0x03:
-                registrador_ax = registrador_bx
+                registrador_bx = registrador_bx
             if operador2 == 0x04:
-                registrador_ax = registrador_cx
+                registrador_bx = registrador_cx
             if operador2 == 0x05:
-                registrador_ax = registrador_dx
+                registrador_bx = registrador_dx
+        elif operador1 == 0x04:
+            if operador2 == 0x02:
+                registrador_cx = registrador_ax
+            if operador2 == 0x03:
+                registrador_cx = registrador_bx
+            if operador2 == 0x04:
+                registrador_cx = registrador_cx
+            if operador2 == 0x05:
+                registrador_cx = registrador_dx
+        elif operador1 == 0x05:
+            if operador2 == 0x02:
+                registrador_dx = registrador_ax
+            if operador2 == 0x03:
+                registrador_dx = registrador_bx
+            if operador2 == 0x04:
+                registrador_dx = registrador_cx
+            if operador2 == 0x05:
+                registrador_dx = registrador_dx
 
     
     if idInstrucao == 0x79:
@@ -326,11 +380,21 @@ def calcularProximaInstrucao(idInstrucao):
     if idInstrucao == 0x41:
         registrador_cp = registrador_cp + 3
     if idInstrucao == 0x79:
-        registrador_cp = registrador_cp + 2
+        if flag_zero == 1:
+            registrador_cp = registrador_cp 
+        else:
+            registrador_cp = registrador_cp + 2
     if idInstrucao == 0x50:
-        registrador_cp = registrador_cp + 2
+        registrador_cp = registrador_cp 
     if idInstrucao == 0x70:
-        registrador_cp = registrador_cp + 2
+        if flag_zero == 1:
+            registrador_cp = registrador_cp 
+        else:
+            registrador_cp = registrador_cp + 2
+    if idInstrucao == 0x60:
+        registrador_cp = registrador_cp + 3
+    if idInstrucao == 0x61:
+        registrador_cp = registrador_cp + 3
 
 
 
